@@ -1,0 +1,66 @@
+---
+title: "creat_newdata"
+author: "Ranqing Song"
+date: "2019/2/2"
+output:  pdf_document
+fontsize: 11pt
+geometry: margin=lin
+citation_package: natbib
+---
+```{r setup, include=FALSE}
+# clear variables, close windows and change dictionary
+rm(list = ls(all = TRUE))
+graphics.off()
+wdir<- "~/Dropbox/7 miao/SPL-WS1819-20181017/p2p_lender"
+
+knitr::opts_knit$set(root.dir = wdir)
+# results = c("all", "hide")
+# fig.keep = c("all, 'none')
+knitr::opts_chunk$set(echo = TRUE, results = 'all', message = FALSE, warning = FALSE, fig.keep = 'none', cache = FALSE, cache.lazy = FALSE)
+options(repos=c(CRAN = "https://cran.uni-muenster.de/"))
+```
+# Introduction
+This paper estimates the default risk of loan applicants based on their and loan characteristics. selection bias
+# Data Prepraration
+## Data set 
+This paper employed the data sets offered by Lending Club from 2014 to 2015. Firstly, the package "readr" is used, because using "read.csv" to import large data would lead to the lack of some observations. Afterwards, I combinded the the data into one dataset that would be further cleaned and prepared for building models.
+```{r}
+#loan packages
+library(readr)
+library(caret)
+##load data
+data_2014<- read_csv("LoanStats_2014.csv", skip=1)
+data_2015<- read_csv("LoanStats_2015.csv", skip=1)
+datasetall<- rbind(data_2014, data_2015)
+
+```
+The defaulted loan is defined as a loan on which the payment is late for an extended priode of time(help.lendingclub.com). The final status of loans "in grace period" and "late" are unclear. When borrowers are deliquent, LenidngClub make efforts to bring the loans back to current status. If these loans are repaid with the extended periode, they would not be taken as default. The loans have the status "current" means that they are up to date and they have one or more scheduled future payments. Hier, we take that only mature loans could be devided into default or non default loans. Therefore, loans have statuses  "Charged Off", "Default" and "Fully Paid" would be included in this research. 
+The Lending Club offers loans with a term of 36 months and 60 months. With the two-way table, it could be found that loans with the maturity of 36 months and 60 months are differently distributed in terms of loan status. For example,around one third of 60 months loans are still outstanding. For consistency purpose, 36 months loans would be selected, . (p2plending & analysis of scoring..) 
+```{r}
+#check the propoortion of bad and good borrowers in terms of loan term
+options(scipen=200) ##do not use scientific notation
+prop.table(xtabs(~term+loan_status, data=datasetall),1) 
+
+##keep loans with status: "Charged Off", "Default", "Fully Paid"
+dataset_sel_status<- subset(datasetall, loan_status %in% c("Charged Off", "Default", "Fully Paid"))
+dataset_36mon<- subset(dataset_sel_status, term=="36 months")
+```
+There are 145 variables for each observations. Nevertheless, a large part of these variables cannot be used in modeling due to several reasons. The first reason is that we focus on predicting default and non default loans with the information given during the applicatinon. Thus, several varibles gathered during the duration of the loans, like "last payment amount", would be neglected. Moreover, some variable too much missing values, like "hardship tye" and "the number of open credit in the borrower"s credit file". A third reason is that some variables stands for non-standardized, user-generated info. The variable "job title" and "loan desciption" are examples for the case. The results of Cinca et al.show that the most important factors explaining default risk are loan grade, interest rate, loan purpose, income, credit history and borrowers' indebetedness. In this paper, independent variables are selected based on the research by Carlos Serrano-Cinca et al. (determinants) and Carmichael.  
+
+Those variables explaining "grade", "subgrade", "interest rate" are the results by Lending Club after assessing borrowers(p2plending). Lending Club uses the self-reported FICO-score of the borrowers to conduct an estimate of the borrowing interest rate when potential borrowers are inquiring loans. When the borrowers decides to apply for a loan, Lending Club gathers information which deems relevant to truthfully assess the creditworthiness of the borrowers. These critical information such as annual income, loan amount is verified by Lending Club before the loan is approved or declined.(www.lendingclub.com) An approved loan will be assigned a grade ranging from A to G, each of it them is further divided into 5 subgrades, ranging from 1 to 5. One subgrade corresponds to an estimated interest rate. For the interest rate, current macroeconomic factors are also taken into account(analysis of sc).
+Variables "purpose" ,"loan amount","annual income", "housing situation","loan purpose",Credit Historu Length,"Delinquency 2 years","inquiries last 6 months","number of derogatory public records","revolving utilization", "open accounts","Months since last deliquency" were selected according to the result of (p2p lending), 
+
+```{r}
+#selecting independent variables
+dataset_var<- subset(dataset_36mon, select=c("int_rate","grade","sub_grade","home_ownership","annual_inc","delinq_2yrs","dti","inq_last_6mths","loan_status","loan_amnt","mths_since_last_delinq","open_acc","pub_rec","purpose","revol_util","installment","earliest_cr_line","issue_d"))
+
+set.seed(123)
+idx.train <- createDataPartition(dataset_var$loan_status, p=0.25, list=FALSE)
+##60% default and non-default sample will be arranged into train set
+newdata<- dataset_var[idx.train, ]  
+
+#output
+write.csv(newdata, file = "newdata_1415.csv")
+```
+
+
