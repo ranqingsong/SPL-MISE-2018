@@ -1,9 +1,12 @@
 
+rm(list = ls(all = TRUE))
+graphics.off(
+
 #loan packages
 library(readr)
 library(caret)
 ##load data
-data_2014<- read_csv("LoanStats_2014.csv", skip=1)
+data_2014<- read_csv("LoanStats_2014.csv",  skip=1)
 data_2015<- read_csv("LoanStats_2015.csv", skip=1)
 datasetall<- rbind(data_2014, data_2015)
 
@@ -17,6 +20,6 @@ newdata<- dataset_var[idx.train, ]
 
 #output
 write.csv(newdata, file = "newdata_1415.csv")
-```
+
 
 
