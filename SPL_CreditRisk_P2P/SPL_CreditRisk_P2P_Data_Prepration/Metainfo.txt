@@ -1,0 +1,15 @@
+
+Name of QuantLet : SPL_CreditRisk_P2P_Classification_Tree
+
+Published in : Credit Risk Analysis of Peer to Peer Lending Based on the Logistic Regression Model and Classification Trees
+
+Description : 'Prepared the data for modeling and predicting. Raw data could be downloaded from URL. 
+Descriptive data analysis ís done'
+
+Keywords : 'plot, variables, descriptive variables, ggplot'
+
+Author : Ranqing Song
+
+Example : 
+- plot_cat_variables: 'plots of distributions of all categorical variales.'
+- plot_num_variables: 'plots of distributions of all numeric variables.'
