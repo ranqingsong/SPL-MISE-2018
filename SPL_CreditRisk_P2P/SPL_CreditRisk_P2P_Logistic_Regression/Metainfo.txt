@@ -1,0 +1,18 @@
+Name of QuantLet : SPL_CreditRisk_P2P_Logistic_Regression
+
+Published in : Credit Risk Analysis of Peer to Peer Lending Based on the Logistic Regression Model and Classification Trees
+
+Description : 'Finds the optimal regression models based on prapared dataset. Built regressions based on the train set and evaluated
+them with the test set.'
+
+Keywords : 'glm, AUC, ROC, confusion matrix, F-metric, Lasso, Ridge, AIC, stepwise selection'
+
+Author : Ranqing Song
+
+Datafile:
+- prep_data.csv : 'extracted data from the files downloaded from Lending Club 2014 and 2015'
+
+
+Example : 
+- corrplot: 'correlation plot of all predictors.'
+- ROC_plot: 'ROC plot of all regressions.'
