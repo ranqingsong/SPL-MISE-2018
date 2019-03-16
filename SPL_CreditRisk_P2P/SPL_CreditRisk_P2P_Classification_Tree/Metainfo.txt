@@ -1,0 +1,22 @@
+
+Name of QuantLet : SPL_CreditRisk_P2P_Classification_Tree
+
+Published in : Credit Risk Analysis of Peer to Peer Lending Based on the Logistic Regression Model and Classification Trees
+
+Description : 'Finds the optimal classification tree using rpart and caret packages. To combat the class imbalance, 
+prior probablities and resampling methods were applied. All classification trees were trained with the training set and evaluated
+with the test set. AUC and several threshold metrics were used to evaluate the predictive capablitity.'
+
+Keywords : 'Classification Trees, AUC, ROC, confusion matrix, F-metric, class imbalance, over-sampling. undersampling, 
+prior probability'
+
+Author : Ranqing Song
+
+Datafile:
+- prep_data.csv : 'extracted data from the files downloaded from Lending Club 2014 and 2015'
+
+
+Example : 
+- classification_tree_oversampling: 'Classification Trees generated based on over-sampled train set.'
+- classification_tree_undersampling: 'Classification Trees generated based on under-sampled train set.'
+- classification_trees: 'Classification Trees generated based on train set with defined prior probabilities.'
