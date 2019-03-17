@@ -36,7 +36,7 @@ datasetvar = subset(dataset36mon, select = c("int.rate", "grade", "sub.grade", "
 set.seed(123)
 idxtrain = createDataPartition(datasetvar$loan.status, p = 0.2, list = FALSE)
 ## 60% default and non-default sample will be arranged into train set
-newdata = datasetvar[idxtrain, ]
+dataset = datasetvar[idxtrain, ]
 
 ## convert the dependent variable into binary: Loans charged off or default are defined as bad, others are defined as good
 levels(dataset$loan.status) = c("bad", "good")
@@ -47,7 +47,7 @@ table(dataset$loan.status)/nrow(dataset)
 ## for numeric Variable: int.rate and revol,util, get rid of %, and convert into numeric variables
 chartonum = c("int.rate", "revol.util")
 for (i in chartonum) {
-    dataset[, i] = gsub("%", " ", dataset[, i])
+    dataset[, i] = gsub("%", "0", dataset[, i])
 }
 dataset[, chartonum] = lapply(dataset[, chartonum], as.numeric)
 
